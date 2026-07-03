@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drashti Bambhaniya — Design Verification Engineer</title>
+<meta name="description" content="Portfolio of Drashti Bambhaniya, Design Verification Engineer — UVM testbenches for RISC-V CPUs and AXI4 IP, functional coverage closure, AMBA CHI cache coherency.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='6' width='40' height='40' rx='8' fill='%23F59E0B'/><rect x='6' y='54' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='54' width='40' height='40' rx='8' fill='%23334155'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0B1120;
+  --bg-raised: #101a30;
+  --surface: rgba(148, 163, 184, 0.05);
+  --border: rgba(148, 163, 184, 0.14);
+  --border-strong: rgba(148, 163, 184, 0.28);
+  --text: #E6EDF6;
+  --muted: #97A6BC;
+  --teal: #2DD4BF;
+  --teal-dim: rgba(45, 212, 191, 0.14);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245, 158, 11, 0.14);
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: "Space Grotesk", "Inter", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --maxw: 1100px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16.5px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: rgba(45, 212, 191, 0.3); }
+
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+/* ---------- ambient background ---------- */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 55% 45% at 78% -8%, rgba(45, 212, 191, 0.07), transparent 60%),
+    radial-gradient(ellipse 45% 40% at 8% 32%, rgba(245, 158, 11, 0.045), transparent 60%),
+    var(--bg);
+}
+.ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148,163,184,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 55%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent 55%);
+}
+
+/* ---------- nav ---------- */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(11, 17, 32, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.nav-logo:hover { text-decoration: none; }
+.nav-logo .tick { color: var(--teal); }
+.nav-links {
+  display: flex;
+  gap: 4px;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  display: block;
+  padding: 7px 13px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color .18s, background .18s;
+}
+.nav-links a:hover {
+  color: var(--text);
+  background: var(--surface);
+  text-decoration: none;
+}
+.nav-links a.active { color: var(--teal); }
+
+/* ---------- hero ---------- */
+.hero {
+  padding: 158px 0 76px;
+  position: relative;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: 56px;
+  align-items: center;
+}
+.kicker {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.kicker::before {
+  content: "";
+  width: 26px; height: 1px;
+  background: var(--teal);
+}
+h1 {
+  font-family: var(--display);
+  font-size: clamp(40px, 5.4vw, 60px);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  margin-bottom: 18px;
+}
+.hero .title-line {
+  font-family: var(--display);
+  font-size: clamp(19px, 2.2vw, 24px);
+  font-weight: 500;
+  color: var(--amber);
+  letter-spacing: -0.01em;
+  margin-bottom: 22px;
+}
+.hero .tagline {
+  font-size: clamp(17px, 1.9vw, 19px);
+  color: var(--text);
+  font-weight: 500;
+  max-width: 30em;
+  margin-bottom: 14px;
+}
+.hero .intro {
+  color: var(--muted);
+  max-width: 34em;
+  margin-bottom: 34px;
+}
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 11px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  background: var(--surface);
+  transition: border-color .18s, background .18s, transform .18s;
+}
+.btn:hover {
+  text-decoration: none;
+  border-color: var(--teal);
+  background: var(--teal-dim);
+  transform: translateY(-1px);
+}
+.btn.primary {
+  background: var(--teal);
+  color: #06251f;
+  border-color: var(--teal);
+}
+.btn.primary:hover { background: #4ae2ce; }
+.btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+/* coverage grid panel */
+.cov-panel {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(16,26,48,0.85), rgba(11,17,32,0.6));
+  padding: 20px 20px 16px;
+  box-shadow: 0 24px 60px -30px rgba(0,0,0,0.7);
+}
+.cov-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-family: var(--mono);
+}
+.cov-head .lbl {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.cov-head .pct {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+}
+#covCanvas {
+  display: block;
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+}
+.cov-foot {
+  display: flex;
+  gap: 18px;
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+.cov-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.cov-key i {
+  width: 10px; height: 10px;
+  border-radius: 3px;
+  display: inline-block;
+}
+.cov-key .k-hit { background: var(--teal); }
+.cov-key .k-cross { background: var(--amber); }
+.cov-key .k-miss { background: #2b3852; }
+
+/* hero stats */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 64px;
+}
+.stat {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 22px 22px 19px;
+  transition: border-color .25s, transform .25s;
+}
+.stat:hover {
+  border-color: rgba(45,212,191,0.45);
+  transform: translateY(-2px);
+}
+.stat .num {
+  font-family: var(--display);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.stat:nth-child(even) .num { color: var(--amber); }
+.stat .lbl {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* ---------- state-machine divider ---------- */
+.fsm-divider {
+  padding: 26px 0 10px;
+  overflow: hidden;
+}
+.fsm-divider svg {
+  display: block;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  opacity: 0.85;
+}
+.fsm-node circle {
+  fill: var(--bg-raised);
+  stroke: var(--border-strong);
+  stroke-width: 1.2;
+}
+.fsm-node text {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  fill: var(--muted);
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.fsm-node .sub {
+  font-size: 8.5px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  fill: rgba(151,166,188,0.55);
+}
+.fsm-edge {
+  fill: none;
+  stroke: rgba(148,163,184,0.22);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 6;
+  animation: dashflow 2.6s linear infinite;
+}
+.fsm-edge.back { stroke: rgba(245,158,11,0.28); }
+@keyframes dashflow { to { stroke-dashoffset: -22; } }
+.fsm-token { fill: var(--teal); }
+.fsm-token.amber { fill: var(--amber); }
+.fsm-arrow { fill: rgba(148,163,184,0.35); }
+
+/* ---------- sections ---------- */
+section { padding: 84px 0; }
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 44px;
+}
+.sec-head .idx {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--amber);
+}
+h2 {
+  font-family: var(--display);
+  font-size: clamp(27px, 3.4vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.sec-head::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+  transform: translateY(-6px);
+}
+
+/* about */
+.about-body {
+  max-width: 46em;
+  color: var(--muted);
+  font-size: 17.5px;
+}
+.about-body strong { color: var(--text); font-weight: 600; }
+.about-now {
+  margin-top: 28px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--teal);
+  border: 1px solid rgba(45,212,191,0.3);
+  background: var(--teal-dim);
+  border-radius: 999px;
+  padding: 8px 16px;
+}
+.about-now .dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45,212,191,0.45); }
+  50% { box-shadow: 0 0 0 6px rgba(45,212,191,0); }
+}
+
+/* experience timeline */
+.timeline {
+  position: relative;
+  padding-left: 34px;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--teal), rgba(148,163,184,0.15));
+}
+.job {
+  position: relative;
+  padding-bottom: 56px;
+}
+.job:last-child { padding-bottom: 0; }
+.job::before {
+  content: "";
+  position: absolute;
+  left: -31px;
+  top: 9px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 3px solid var(--teal);
+}
+.job:nth-child(2)::before { border-color: var(--amber); }
+.job-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 14px;
+  margin-bottom: 4px;
+}
+.job-head h3 {
+  font-family: var(--display);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.job-head .role { color: var(--teal); font-weight: 500; font-size: 16px; }
+.job .dates {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.job ul {
+  list-style: none;
+  color: var(--muted);
+  max-width: 52em;
+}
+.job li {
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 9px;
+  font-size: 15.5px;
+}
+.job li::before {
+  content: "▸";
+  position: absolute;
+  left: 2px;
+  color: var(--teal);
+  font-size: 12px;
+  top: 3px;
+}
+.job li strong { color: var(--text); font-weight: 600; }
+.impact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0 20px;
+}
+.impact {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 12px 18px;
+  min-width: 130px;
+}
+.impact .v {
+  font-family: var(--display);
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--amber);
+  line-height: 1.15;
+}
+.impact:first-child .v { color: var(--teal); }
+.impact .k {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* projects */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.proj {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(16,26,48,0.7), rgba(11,17,32,0.4));
+  padding: 30px 30px 26px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .25s, transform .25s, box-shadow .25s;
+}
+.proj:hover {
+  border-color: rgba(45,212,191,0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 24px 50px -28px rgba(0,0,0,0.75);
+}
+.proj::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--amber));
+  opacity: 0;
+  transition: opacity .25s;
+}
+.proj:hover::before { opacity: 1; }
+.proj h3 {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  padding-right: 40px;
+}
+.proj .desc {
+  color: var(--muted);
+  font-size: 15px;
+  flex: 1;
+}
+.proj .desc p { margin-bottom: 10px; }
+.proj .desc strong { color: var(--text); font-weight: 600; }
+.proj-icon {
+  position: absolute;
+  top: 26px; right: 26px;
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  color: var(--teal);
+  background: var(--surface);
+}
+.proj-icon svg { width: 17px; height: 17px; }
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0;
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid rgba(45,212,191,0.22);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+.repo-link {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted);
+  border-top: 1px dashed var(--border-strong);
+  padding-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.repo-link svg { width: 14px; height: 14px; flex-shrink: 0; opacity: .7; }
+.repo-link a { min-width: 0; word-break: break-all; }
+
+/* skills */
+.skill-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.skill-group h3 {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.skill-group h3::after {
+  content: "";
+  flex: 1;
+  max-width: 90px;
+  height: 1px;
+  background: var(--border-strong);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 16px;
+  transition: border-color .18s, background .18s;
+  cursor: default;
+}
+.chip:hover {
+  border-color: rgba(45,212,191,0.5);
+  background: var(--teal-dim);
+}
+.chip[data-used] { border-bottom: 1px dashed rgba(45,212,191,0.55); }
+.chip[data-used]::after {
+  content: attr(data-used);
+  position: absolute;
+  bottom: calc(100% + 9px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #17233c;
+  border: 1px solid var(--border-strong);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 7px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s, transform .18s;
+  z-index: 10;
+  box-shadow: 0 10px 26px -10px rgba(0,0,0,0.7);
+}
+.chip[data-used]::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 9px; height: 9px;
+  background: #17233c;
+  border-right: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+  opacity: 0;
+  transition: opacity .18s;
+  z-index: 11;
+}
+.chip[data-used]:hover::after,
+.chip[data-used]:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.chip[data-used]:hover::before,
+.chip[data-used]:focus-visible::before { opacity: 1; }
+
+/* education */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.edu {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  padding: 28px 30px;
+  transition: border-color .25s, transform .25s;
+}
+.edu:hover {
+  border-color: rgba(245,158,11,0.4);
+  transform: translateY(-2px);
+}
+.edu .school {
+  font-family: var(--display);
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.edu .degree { color: var(--muted); font-size: 15px; margin-bottom: 16px; }
+.edu .meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.edu .cgpa {
+  color: var(--amber);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+/* contact */
+.contact { text-align: center; padding-bottom: 100px; }
+.contact h2 { margin-bottom: 16px; }
+.contact .sub {
+  color: var(--muted);
+  max-width: 34em;
+  margin: 0 auto 36px;
+}
+.contact-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* footer */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 26px 0;
+}
+.foot-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.foot-inner .mono { font-family: var(--mono); font-size: 12px; }
+
+/* ---------- reveal animation ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .7s cubic-bezier(.2,.65,.3,1), transform .7s cubic-bezier(.2,.65,.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal.d1 { transition-delay: .08s; }
+.reveal.d2 { transition-delay: .16s; }
+.reveal.d3 { transition-delay: .24s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .fsm-edge { animation: none; }
+  * { animation-duration: 0.01ms !important; }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 920px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 44px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .proj-grid, .edu-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  body { font-size: 15.5px; }
+  .hero { padding-top: 130px; }
+  section { padding: 64px 0; }
+  .stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat { padding: 18px 16px 15px; }
+  .stat .num { font-size: 30px; }
+  .nav-inner { padding: 0 18px; }
+  .wrap, .foot-inner { padding-left: 18px; padding-right: 18px; }
+  .timeline { padding-left: 26px; }
+  .job::before { left: -23px; }
+  #covCanvas { height: 240px; }
+  .chip[data-used]::after { white-space: normal; width: max-content; max-width: 220px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<nav aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#top">drashti<span class="tick">.</span>bambhaniya</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="kicker reveal">Design Verification</p>
+        <h1 class="reveal d1">Drashti Bambhaniya</h1>
+        <p class="title-line reveal d1">Design Verification Engineer</p>
+        <p class="tagline reveal d2">Closing coverage on RISC-V cores and AMBA protocols — one bin at a time.</p>
+        <p class="intro reveal d2">I build layered UVM testbenches for RISC-V CPUs and AXI4 IP — constrained-random stimulus, self-checking scoreboards, assertion-driven closure — and I'm currently deepening my AMBA CHI cache-coherency expertise.</p>
+        <div class="hero-links reveal d3">
+          <a class="btn primary" href="mailto:drashtiahir23@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            Email
+          </a>
+          <a class="btn" href="https://github.com/Drashtibambhaniya" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.34.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+            GitHub
+          </a>
+          <a class="btn" href="https://www.linkedin.com/in/drashti-bambhaniya" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.55V9h3.57v11.45Z"/></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
+      <div class="cov-panel reveal d2" role="img" aria-label="Animated functional coverage heatmap filling to 98 percent">
+        <div class="cov-head">
+          <span class="lbl">functional_coverage</span>
+          <span class="pct" id="covPct">0.0%</span>
+        </div>
+        <canvas id="covCanvas" aria-hidden="true"></canvas>
+        <div class="cov-foot" aria-hidden="true">
+          <span class="cov-key"><i class="k-hit"></i>bin hit</span>
+          <span class="cov-key"><i class="k-cross"></i>cross hit</span>
+          <span class="cov-key"><i class="k-miss"></i>uncovered</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat reveal"><div class="num" data-count="98" data-suffix="%">0%</div><div class="lbl">Coverage closure on ALU testbench</div></div>
+      <div class="stat reveal d1"><div class="num" data-count="8">0</div><div class="lbl">RTL bugs root-caused via waveform debug</div></div>
+      <div class="stat reveal d2"><div class="num" data-count="35">0</div><div class="lbl">Directed tests to closure</div></div>
+      <div class="stat reveal d3"><div class="num" data-count="3">0</div><div class="lbl">UVM testbenches built — RV32I · AXI4-Lite · ALU</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- MOESI state-machine divider -->
+<div class="fsm-divider" aria-hidden="true">
+  <svg viewBox="0 0 860 130" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M0 0 L8 4 L0 8 z" class="fsm-arrow"/>
+      </marker>
+    </defs>
+    <!-- forward edges M→O→E→S→I (arcs above) -->
+    <path id="eMO" class="fsm-edge" d="M 92 52 Q 145 22 198 52" marker-end="url(#arr)"/>
+    <path id="eOE" class="fsm-edge" d="M 262 52 Q 315 22 368 52" marker-end="url(#arr)"/>
+    <path id="eES" class="fsm-edge" d="M 432 52 Q 485 22 538 52" marker-end="url(#arr)"/>
+    <path id="eSI" class="fsm-edge" d="M 602 52 Q 655 22 708 52" marker-end="url(#arr)"/>
+    <!-- return edge I→M (arc below) -->
+    <path id="eIM" class="fsm-edge back" d="M 708 78 Q 400 148 92 78" marker-end="url(#arr)"/>
+
+    <g class="fsm-node">
+      <circle cx="70" cy="65" r="24"/><text x="70" y="63">M</text><text x="70" y="102" class="sub">MODIFIED</text>
+    </g>
+    <g class="fsm-node">
+      <circle cx="230" cy="65" r="24"/><text x="230" y="63">O</text><text x="230" y="102" class="sub">OWNED</text>
+    </g>
+    <g class="fsm-node">
+      <circle cx="400" cy="65" r="24"/><text x="400" y="63">E</text><text x="400" y="102" class="sub">EXCLUSIVE</text>
+    </g>
+    <g class="fsm-node">
+      <circle cx="570" cy="65" r="24"/><text x="570" y="63">S</text><text x="570" y="102" class="sub">SHARED</text>
+    </g>
+    <g class="fsm-node">
+      <circle cx="740" cy="65" r="24"/><text x="740" y="63">I</text><text x="740" y="102" class="sub">INVALID</text>
+    </g>
+
+    <circle class="fsm-token" r="3.5">
+      <animateMotion dur="3.2s" repeatCount="indefinite" begin="0s">
+        <mpath href="#eES"/>
+      </animateMotion>
+    </circle>
+    <circle class="fsm-token amber" r="3.5">
+      <animateMotion dur="5.5s" repeatCount="indefinite" begin="1s">
+        <mpath href="#eIM"/>
+      </animateMotion>
+    </circle>
+  </svg>
+</div>
+
+<main>
+<!-- ================= ABOUT ================= -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">01</span><h2>About</h2></div>
+    <div class="about-body reveal d1">
+      <p>I'm a Design Verification Engineer at <strong>Mirafra Technologies</strong>, where I build SystemVerilog/UVM testbenches for RISC-V processors and AXI4 IP — layered environments with constrained-random stimulus, self-checking scoreboards, and functional coverage models built for closure, not just checkbox metrics. Before this, I spent a year at <strong>NXP Semiconductors</strong> working hands-on with i.MX boards across multiple SoCs: platform bring-up, Wi-Fi driver debugging, and CI/CD automation for the driver build flow.</p>
+      <p style="margin-top:14px">I hold an <strong>M.Tech in Computer Science Engineering</strong> from Nirma University (8.36/10) and a <strong>B.E. in Information Technology</strong> from Gujarat Technological University (8.06/10). What I enjoy most is the detective work of verification — tracing a scoreboard mismatch back through waveforms to the exact RTL line that caused it.</p>
+      <div class="about-now">
+        <span class="dot" aria-hidden="true"></span>
+        Currently studying: ARM AMBA CHI — cache coherency, node architecture, transaction flows
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EXPERIENCE ================= -->
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">02</span><h2>Experience</h2></div>
+    <div class="timeline">
+
+      <article class="job reveal">
+        <div class="job-head">
+          <h3>Mirafra Technologies</h3>
+          <span class="role">Verification Engineer</span>
+        </div>
+        <p class="dates">Aug 2025 – Present · SystemVerilog · UVM · SVA · Functional Coverage</p>
+        <div class="impact-row">
+          <div class="impact"><div class="v">98%</div><div class="k">ALU coverage closed</div></div>
+          <div class="impact"><div class="v">8</div><div class="k">RTL bugs root-caused</div></div>
+          <div class="impact"><div class="v">35</div><div class="k">directed tests</div></div>
+        </div>
+        <ul>
+          <li>Built SV/UVM layered testbenches for an <strong>RV32I RISC-V processor</strong>, <strong>AXI4-Lite slave RAM</strong>, and <strong>ALU design</strong> — constrained-random stimulus generation, self-checking scoreboards, and full end-to-end simulation flow across all projects.</li>
+          <li>Structured each environment around standard UVM <strong>agent / sequencer / driver / monitor / coverage-collector</strong> architecture for reusability across design blocks.</li>
+          <li>Implemented <strong>SystemVerilog Assertions</strong> to validate protocol handshake behaviour and design correctness, supporting verification closure.</li>
+          <li>Designed <strong>functional coverage models</strong> with targeted bins for instruction categories, protocol scenarios, corner cases, and state transitions — closed ALU testbench coverage to 98% across 35 directed tests and root-caused 8 RTL bugs.</li>
+          <li>Ran simulations in <strong>Mentor Questa</strong> and <strong>Synopsys VCS</strong>, analyzed waveform outputs, and performed root-cause analysis across regression runs.</li>
+          <li>Currently building protocol-level understanding of <strong>ARM AMBA CHI</strong> — cache coherency, node architecture, transaction flows, and channel structure — through structured specification study.</li>
+        </ul>
+      </article>
+
+      <article class="job reveal">
+        <div class="job-head">
+          <h3>NXP Semiconductors</h3>
+          <span class="role">Software Intern</span>
+        </div>
+        <p class="dates">Jul 2024 – Jun 2025 · Python · DevOps · Wi-Fi · Linux Device Drivers</p>
+        <div class="impact-row">
+          <div class="impact"><div class="v">802.11</div><div class="k">IEEE compliance improved</div></div>
+          <div class="impact"><div class="v">All</div><div class="k">SoC/BSP builds automated</div></div>
+          <div class="impact"><div class="v">CI/CD</div><div class="k">pre-merge integration</div></div>
+        </div>
+        <ul>
+          <li>Worked extensively across <strong>i.MX boards on multiple NXP SoCs</strong> — hands-on SoC-level hardware-software integration, platform bring-up, and interface-level debugging.</li>
+          <li>Identified and resolved <strong>Wi-Fi performance and connectivity issues</strong>, improving system stability and compliance with IEEE 802.11 standards.</li>
+          <li>Automated the <strong>build process for all SoC and BSP combinations</strong> using Python and Shell scripts, integrated into the CI/CD pipeline as pre-merge checks to ensure consistent driver quality.</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROJECTS ================= -->
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">03</span><h2>Projects</h2></div>
+    <div class="proj-grid">
+
+      <article class="proj reveal">
+        <div class="proj-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/></svg>
+        </div>
+        <h3>RISC-V RV32I Processor Functional Verification</h3>
+        <div class="desc">
+          <p>Developed an <strong>ISA reference model</strong> covering all RV32I instruction types, CSR operations, branch/jump PC prediction, and load/store validation.</p>
+          <p>Architected a <strong>layered UVM environment</strong> for a pipelined RV32I processor, wiring the reference model into the scoreboard for instruction-level DUT comparison.</p>
+          <p>Designed functional coverage through <strong>constrained-random stimulus</strong> with legal opcode constraints and cross-coverage across all RV32I instruction categories.</p>
+        </div>
+        <div class="tags">
+          <span class="tag">SystemVerilog</span><span class="tag">UVM</span><span class="tag">RISC-V ISA</span><span class="tag">Functional Coverage</span>
+        </div>
+        <div class="repo-link">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.34.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+          <a href="https://github.com/Drashtibambhaniya/RISC-V-RV32I-UVM-Testbench" target="_blank" rel="noopener">github.com/Drashtibambhaniya/RISC-V-RV32I-UVM-Testbench</a>
+        </div>
+      </article>
+
+      <article class="proj reveal d1">
+        <div class="proj-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V7l4 4 4-7 4 10 4-4v7"/></svg>
+        </div>
+        <h3>8-bit Parameterized ALU Verification</h3>
+        <div class="desc">
+          <p>Built a <strong>complete UVM testbench</strong> — sequence, driver, monitor, scoreboard, agent, env — to verify a 25-opcode 8-bit parameterized ALU across arithmetic, logical, and shift operations.</p>
+          <p>Developed constrained-random stimulus with directed sequences, a <strong>self-checking reference-model scoreboard</strong>, and SVA assertions validating correctness across all opcodes and edge cases.</p>
+          <p>Defined functional covergroups with targeted bins per opcode and operand combination — <strong>closed coverage to 98%</strong> across 35 directed random tests, root-causing 8 RTL bugs via waveform analysis in QuestaSim and VCS.</p>
+        </div>
+        <div class="tags">
+          <span class="tag">SystemVerilog</span><span class="tag">UVM</span><span class="tag">SVA</span><span class="tag">Functional Coverage</span>
+        </div>
+        <div class="repo-link">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.34.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
+          <a href="https://github.com/Drashtibambhaniya/ALU_verification" target="_blank" rel="noopener">github.com/Drashtibambhaniya/ALU_verification</a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">04</span><h2>Skills</h2></div>
+    <div class="skill-groups">
+
+      <div class="skill-group reveal">
+        <h3>CPU &amp; Architecture</h3>
+        <div class="chips">
+          <span class="chip" tabindex="0" data-used="RV32I processor verification · Mirafra">RISC-V ISA (RV32I+M)</span>
+          <span class="chip" tabindex="0" data-used="Pipelined RV32I UVM environment">Pipeline Architecture</span>
+          <span class="chip" tabindex="0" data-used="AMBA CHI specification study · Mirafra">Cache Coherency</span>
+          <span class="chip" tabindex="0" data-used="Structured spec study — nodes, transactions, channels">AMBA CHI</span>
+          <span class="chip">NoC</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal d1">
+        <h3>Design &amp; Verification</h3>
+        <div class="chips">
+          <span class="chip" tabindex="0" data-used="All testbenches · Mirafra + both projects">SystemVerilog</span>
+          <span class="chip">Verilog</span>
+          <span class="chip" tabindex="0" data-used="RV32I · AXI4-Lite RAM · ALU testbenches">UVM</span>
+          <span class="chip">Digital Design Fundamentals</span>
+          <span class="chip" tabindex="0" data-used="98% closure on ALU · coverage models at Mirafra">Functional Coverage</span>
+          <span class="chip" tabindex="0" data-used="Legal-opcode constraints · cross coverage">Constrained-Random Verification</span>
+          <span class="chip" tabindex="0" data-used="Protocol handshake checks · ALU assertions">SVA</span>
+          <span class="chip" tabindex="0" data-used="8 RTL bugs root-caused in Questa/VCS">Waveform Debug</span>
+          <span class="chip" tabindex="0" data-used="AXI4-Lite slave RAM verification · Mirafra">AXI4</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal d2">
+        <h3>Programming &amp; Automation</h3>
+        <div class="chips">
+          <span class="chip">C/C++</span>
+          <span class="chip" tabindex="0" data-used="SoC/BSP build automation · NXP">Python</span>
+          <span class="chip" tabindex="0" data-used="Build-flow automation · NXP">Shell Scripting</span>
+          <span class="chip">Perl</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal d2">
+        <h3>EDA Tools</h3>
+        <div class="chips">
+          <span class="chip" tabindex="0" data-used="Regression runs &amp; waveform debug · Mirafra">Synopsys VCS</span>
+          <span class="chip" tabindex="0" data-used="Simulation &amp; root-cause analysis · Mirafra">Mentor Questa</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal d3">
+        <h3>Dev Tools &amp; DevOps</h3>
+        <div class="chips">
+          <span class="chip">Git</span>
+          <span class="chip">Docker</span>
+          <span class="chip">Kubernetes</span>
+          <span class="chip">Confluence</span>
+          <span class="chip">Bitbucket</span>
+          <span class="chip" tabindex="0" data-used="Pre-merge driver checks · NXP">Jenkins</span>
+          <span class="chip" tabindex="0" data-used="Build pipeline integration · NXP">CI/CD Pipelines</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= EDUCATION ================= -->
+<section id="education">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">05</span><h2>Education</h2></div>
+    <div class="edu-grid">
+      <div class="edu reveal">
+        <div class="school">Nirma University</div>
+        <div class="degree">M.Tech in Computer Science Engineering</div>
+        <div class="meta"><span>2023 – 2025</span><span class="cgpa">8.36 / 10</span></div>
+      </div>
+      <div class="edu reveal d1">
+        <div class="school">Gujarat Technological University</div>
+        <div class="degree">B.E. in Information Technology</div>
+        <div class="meta"><span>2019 – 2023</span><span class="cgpa">8.06 / 10</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="contact">
+  <div class="wrap">
+    <div class="sec-head reveal" style="justify-content:center"><span class="idx">06</span><h2>Get in touch</h2></div>
+    <p class="sub reveal d1">Open to conversations about design verification, RISC-V, coverage methodology, and AMBA protocols. The fastest way to reach me is email.</p>
+    <div class="contact-links reveal d2">
+      <a class="btn primary" href="mailto:drashtiahir23@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        drashtiahir23@gmail.com
+      </a>
+      <a class="btn" href="https://github.com/Drashtibambhaniya" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://www.linkedin.com/in/drashti-bambhaniya" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <span>© 2026 Drashti Bambhaniya</span>
+    <span class="mono">coverage: closed · assertions: passing</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- scroll reveals ---------- */
+  const revealEls = document.querySelectorAll(".reveal");
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    revealEls.forEach(el => el.classList.add("visible"));
+  } else {
+    const ro = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("visible");
+          ro.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    revealEls.forEach(el => ro.observe(el));
+  }
+
+  /* ---------- stat counters ---------- */
+  const nums = document.querySelectorAll(".stat .num[data-count]");
+  function runCounter(el) {
+    const target = parseFloat(el.dataset.count);
+    const suffix = el.dataset.suffix || "";
+    if (reduceMotion) { el.textContent = target + suffix; return; }
+    const dur = 1600, t0 = performance.now();
+    function tick(t) {
+      const p = Math.min((t - t0) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const co = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { runCounter(e.target); co.unobserve(e.target); }
+      });
+    }, { threshold: 0.5 });
+    nums.forEach(el => co.observe(el));
+  } else {
+    nums.forEach(runCounter);
+  }
+
+  /* ---------- nav active state ---------- */
+  const sections = document.querySelectorAll("main section, header.hero");
+  const navLinks = document.querySelectorAll(".nav-links a");
+  if ("IntersectionObserver" in window) {
+    const no = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          navLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
+        }
+      });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    sections.forEach(s => s.id && no.observe(s));
+  }
+
+  /* ---------- coverage grid hero animation ---------- */
+  const canvas = document.getElementById("covCanvas");
+  const pctEl = document.getElementById("covPct");
+  const ctx = canvas.getContext("2d");
+  const TEAL = "#2DD4BF", AMBER = "#F59E0B", MISS = "#2b3852", EMPTY = "#182338";
+  const TARGET_PCT = 98.0;
+
+  let cells = [], cols = 0, rows = 0, cell = 0, gap = 5, dpr = 1;
+  let animStart = null, done = false;
+  const FILL_DUR = 2600, POP = 260;
+  let mouse = { x: -1e4, y: -1e4 };
+
+  function build() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    cell = w < 380 ? 16 : 19;
+    cols = Math.floor((w + gap) / (cell + gap));
+    rows = Math.floor((h + gap) / (cell + gap));
+    const total = cols * rows;
+
+    // choose uncovered bins (2%) and cross-hit bins (~9% of covered)
+    const idx = Array.from({ length: total }, (_, i) => i);
+    for (let i = total - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [idx[i], idx[j]] = [idx[j], idx[i]];
+    }
+    const missCount = Math.max(1, Math.round(total * (1 - TARGET_PCT / 100)));
+    const missSet = new Set(idx.slice(0, missCount));
+
+    const order = idx.slice();
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    const rank = new Array(total);
+    order.forEach((cellIdx, r) => { rank[cellIdx] = r; });
+
+    const offX = (w - (cols * (cell + gap) - gap)) / 2;
+    const offY = (h - (rows * (cell + gap) - gap)) / 2;
+
+    cells = [];
+    for (let i = 0; i < total; i++) {
+      cells.push({
+        x: offX + (i % cols) * (cell + gap),
+        y: offY + Math.floor(i / cols) * (cell + gap),
+        rank: rank[i] / total,
+        miss: missSet.has(i),
+        cross: !missSet.has(i) && Math.random() < 0.09,
+        pulse: 0
+      });
+    }
+  }
+
+  function rrect(x, y, s, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + s, y, x + s, y + s, r);
+    ctx.arcTo(x + s, y + s, x, y + s, r);
+    ctx.arcTo(x, y + s, x, y, r);
+    ctx.arcTo(x, y, x + s, y, r);
+    ctx.closePath();
+  }
+
+  function draw(now) {
+    if (animStart === null) animStart = now;
+    const p = reduceMotion ? 1 : Math.min((now - animStart) / FILL_DUR, 1);
+    const eased = 1 - Math.pow(1 - p, 2.4);
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+    for (const c of cells) {
+      const filled = c.rank <= eased;
+      let color = EMPTY, scale = 1, alpha = 1;
+
+      if (filled) {
+        color = c.miss ? MISS : (c.cross ? AMBER : TEAL);
+        // pop-in
+        const fillTime = animStart + c.rank * FILL_DUR * 1.18;
+        const since = now - fillTime;
+        if (!reduceMotion && since < POP && since >= 0) {
+          const t = since / POP;
+          scale = 0.55 + 0.45 * (1 - Math.pow(1 - t, 2));
+          alpha = 0.4 + 0.6 * t;
+        }
+      }
+
+      // proximity glow after settle
+      if (done && !c.miss && filled) {
+        const dx = c.x + cell / 2 - mouse.x, dy = c.y + cell / 2 - mouse.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 70) alpha = Math.min(1, alpha + (1 - d / 70) * 0.0); // keep alpha; use glow below
+        if (d < 70) {
+          ctx.shadowColor = c.cross ? AMBER : TEAL;
+          ctx.shadowBlur = (1 - d / 70) * 14;
+        }
+      }
+
+      ctx.globalAlpha = filled ? alpha : 0.9;
+      ctx.fillStyle = color;
+      const s = cell * scale, off = (cell - s) / 2;
+      rrect(c.x + off, c.y + off, s, 4);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+    ctx.globalAlpha = 1;
+
+    pctEl.textContent = (eased * TARGET_PCT).toFixed(1) + "%";
+
+    if (p < 1) {
+      requestAnimationFrame(draw);
+    } else {
+      done = true;
+      pctEl.textContent = TARGET_PCT.toFixed(1) + "%";
+      if (!reduceMotion) requestAnimationFrame(idle);
+    }
+  }
+
+  // gentle idle: proximity glow only (redraw on mousemove)
+  let idleQueued = false;
+  function idle(now) {
+    idleQueued = false;
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    for (const c of cells) {
+      const color = c.miss ? MISS : (c.cross ? AMBER : TEAL);
+      const dx = c.x + cell / 2 - mouse.x, dy = c.y + cell / 2 - mouse.y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < 70 && !c.miss) {
+        ctx.shadowColor = c.cross ? AMBER : TEAL;
+        ctx.shadowBlur = (1 - d / 70) * 14;
+      }
+      ctx.fillStyle = color;
+      rrect(c.x, c.y, cell, 4);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+  }
+  function queueIdle() {
+    if (done && !idleQueued && !reduceMotion) {
+      idleQueued = true;
+      requestAnimationFrame(idle);
+    }
+  }
+  canvas.addEventListener("pointermove", e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+    queueIdle();
+  });
+  canvas.addEventListener("pointerleave", () => {
+    mouse.x = mouse.y = -1e4;
+    queueIdle();
+  });
+
+  let resizeT;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(() => {
+      build();
+      if (done) { idle(performance.now()); }
+      else { animStart = null; requestAnimationFrame(draw); }
+    }, 150);
+  });
+
+  build();
+  requestAnimationFrame(draw);
+})();
+</script>
+
+</body>
+</html>

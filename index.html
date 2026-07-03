@@ -869,6 +869,67 @@ footer {
 .tok-n { color: var(--amber); }
 .tok-c { color: #64748B; }
 
+/* ---------- skills cross-coverage matrix ---------- */
+.xcov {
+  margin-top: 48px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.xcov-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.xcov-head .hint { color: var(--struct); }
+.xcov-scroll { overflow-x: auto; }
+.xcov table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 620px;
+}
+.xcov th, .xcov td {
+  padding: 9px 16px;
+  text-align: center;
+}
+.xcov thead th {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--struct);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.xcov tbody th {
+  text-align: left;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color .15s;
+}
+.xcov tbody tr { transition: background .15s; }
+.xcov tbody tr:hover { background: rgba(45, 212, 191, 0.06); }
+.xcov tbody tr:hover th { color: var(--text); }
+.xcov .bin {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border-radius: 4px;
+  background: #1a2540;
+  vertical-align: middle;
+}
+.xcov .bin.hit { background: var(--teal); }
+.xcov tbody tr:hover .bin.hit { box-shadow: 0 0 10px rgba(45, 212, 191, 0.55); }
+
 /* ---------- screen-reader only ---------- */
 .sr-only {
   position: absolute;
@@ -1260,6 +1321,42 @@ footer {
         </div>
       </div>
 
+    </div>
+
+    <div class="xcov reveal">
+      <div class="xcov-head">
+        <span>cross_coverage: skill × context</span>
+        <span class="hint">hover a row · filled bin = used there</span>
+      </div>
+      <div class="xcov-scroll">
+        <table>
+          <caption class="sr-only">Cross-coverage matrix showing which skills were used at which employer or project</caption>
+          <thead>
+            <tr>
+              <th scope="col" style="text-align:left">skill</th>
+              <th scope="col">Mirafra</th>
+              <th scope="col">NXP</th>
+              <th scope="col">RV32I TB</th>
+              <th scope="col">ALU TB</th>
+              <th scope="col">AXI4-Lite TB</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">SystemVerilog</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td></tr>
+            <tr><th scope="row">UVM</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td></tr>
+            <tr><th scope="row">Functional Coverage</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td></tr>
+            <tr><th scope="row">Constrained-Random</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td></tr>
+            <tr><th scope="row">SVA</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td></tr>
+            <tr><th scope="row">Waveform Debug</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td></tr>
+            <tr><th scope="row">RISC-V ISA</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td></tr>
+            <tr><th scope="row">AXI4 Protocol</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td></tr>
+            <tr><th scope="row">Questa / VCS</th><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td></tr>
+            <tr><th scope="row">Python</th><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td></tr>
+            <tr><th scope="row">Shell Scripting</th><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td></tr>
+            <tr><th scope="row">CI/CD · Jenkins</th><td><i class="bin"></i></td><td><i class="bin hit"><span class="sr-only">used</span></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td><td><i class="bin"></i></td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </section>

@@ -16,24 +16,24 @@
 <meta name="twitter:title" content="Drashti Bambhaniya · Design Verification Engineer">
 <meta name="twitter:description" content="UVM testbenches for RISC-V CPUs and AXI4 IP. 98% coverage closure, 8 RTL bugs root-caused.">
 <meta name="twitter:image" content="https://drashtibambhaniya.github.io/og-image.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='6' width='40' height='40' rx='8' fill='%23F59E0B'/><rect x='6' y='54' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='54' width='40' height='40' rx='8' fill='%23334155'/></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='6' width='40' height='40' rx='8' fill='%23F5A623'/><rect x='6' y='54' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='54' width='40' height='40' rx='8' fill='%23334155'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0B1120;
-  --bg-raised: #101a30;
+  --bg: #0A0E17;
+  --bg-raised: #111827;
   --surface: rgba(148, 163, 184, 0.05);
   --border: rgba(148, 163, 184, 0.14);
   --border-strong: rgba(148, 163, 184, 0.28);
-  --text: #E6EDF6;
-  --muted: #97A6BC;
+  --text: #E5E9F0;
+  --muted: #8B93A7;
   --teal: #2DD4BF;
   --teal-dim: rgba(45, 212, 191, 0.14);
-  --amber: #F59E0B;
-  --amber-dim: rgba(245, 158, 11, 0.14);
-  --struct: #8C9AE8;
+  --amber: #F5A623;
+  --amber-dim: rgba(245, 166, 35, 0.14);
+  --struct: #8B7FD9;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --display: "Space Grotesk", "Inter", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -75,7 +75,7 @@ a:hover { text-decoration: underline; text-underline-offset: 3px; }
   z-index: -1;
   background:
     radial-gradient(ellipse 55% 45% at 78% -8%, rgba(45, 212, 191, 0.07), transparent 60%),
-    radial-gradient(ellipse 45% 40% at 8% 32%, rgba(245, 158, 11, 0.045), transparent 60%),
+    radial-gradient(ellipse 45% 40% at 8% 32%, rgba(245, 166, 35, 0.045), transparent 60%),
     var(--bg);
 }
 .ambient::after {
@@ -95,7 +95,7 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: rgba(11, 17, 32, 0.78);
+  background: rgba(10, 14, 23, 0.78);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
@@ -239,7 +239,7 @@ h1 {
   position: relative;
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: linear-gradient(180deg, rgba(16,26,48,0.85), rgba(11,17,32,0.6));
+  background: linear-gradient(180deg, rgba(17,24,39,0.85), rgba(10,14,23,0.6));
   padding: 20px 20px 16px;
   box-shadow: 0 24px 60px -30px rgba(0,0,0,0.7);
 }
@@ -341,7 +341,7 @@ h1 {
 }
 .fsm-node circle {
   fill: var(--bg-raised);
-  stroke: var(--border-strong);
+  stroke: rgba(139, 127, 217, 0.4);
   stroke-width: 1.2;
 }
 .fsm-node text {
@@ -360,12 +360,12 @@ h1 {
 }
 .fsm-edge {
   fill: none;
-  stroke: rgba(148,163,184,0.22);
+  stroke: rgba(139,127,217,0.3);
   stroke-width: 1.2;
   stroke-dasharray: 5 6;
   animation: dashflow 2.6s linear infinite;
 }
-.fsm-edge.back { stroke: rgba(245,158,11,0.28); }
+.fsm-edge.back { stroke: rgba(139,127,217,0.45); }
 @keyframes dashflow { to { stroke-dashoffset: -22; } }
 .fsm-token { fill: var(--teal); }
 .fsm-token.amber { fill: var(--amber); }
@@ -394,7 +394,7 @@ h2 {
   content: "";
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, rgba(140,154,232,0.35), transparent);
+  background: linear-gradient(90deg, rgba(139,127,217,0.35), transparent);
   transform: translateY(-6px);
 }
 
@@ -560,7 +560,7 @@ h2 {
 .proj {
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: linear-gradient(180deg, rgba(16,26,48,0.7), rgba(11,17,32,0.4));
+  background: linear-gradient(180deg, rgba(17,24,39,0.7), rgba(10,14,23,0.4));
   padding: 30px 30px 26px;
   display: flex;
   flex-direction: column;
@@ -739,7 +739,7 @@ h2 {
   transition: border-color .25s, transform .25s;
 }
 .edu:hover {
-  border-color: rgba(245,158,11,0.4);
+  border-color: rgba(245,166,35,0.4);
   transform: translateY(-2px);
 }
 .edu .school {
@@ -803,7 +803,7 @@ footer {
   top: 0; left: 0; right: 0;
   height: 4px;
   z-index: 200;
-  background: repeating-linear-gradient(90deg, #1a2540 0 9px, transparent 9px 12px);
+  background: repeating-linear-gradient(90deg, #1E2637 0 9px, transparent 9px 12px);
   pointer-events: none;
 }
 #covbar i {
@@ -946,7 +946,7 @@ footer {
   display: inline-block;
   width: 14px; height: 14px;
   border-radius: 4px;
-  background: #1a2540;
+  background: #1E2637;
   vertical-align: middle;
 }
 .xcov .bin.hit { background: var(--teal); }
@@ -1513,7 +1513,7 @@ footer {
   const canvas = document.getElementById("covCanvas");
   const pctEl = document.getElementById("covPct");
   const ctx = canvas.getContext("2d");
-  const TEAL = "#2DD4BF", AMBER = "#F59E0B", MISS = "#2b3852", EMPTY = "#182338";
+  const TEAL = "#2DD4BF", AMBER = "#F5A623", MISS = "#2b3852", EMPTY = "#1E2637";
   const TARGET_PCT = 98.0;
 
   let cells = [], cols = 0, rows = 0, cell = 0, gap = 5, dpr = 1;
@@ -1664,7 +1664,7 @@ footer {
       const c = cells[row * cols + col];
       probe.textContent = "bin[" + row + "][" + col + "]: " +
         (c.miss ? "MISS" : c.cross ? "HIT · cross: opcode×operand" : "HIT");
-      probe.style.color = c.miss ? "#97A6BC" : c.cross ? "#F59E0B" : "#2DD4BF";
+      probe.style.color = c.miss ? "#8B93A7" : c.cross ? "#F5A623" : "#2DD4BF";
       const panel = probe.parentElement;
       let px = canvas.offsetLeft + mouse.x + 16;
       const py = canvas.offsetTop + mouse.y - 34;

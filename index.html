@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Drashti Bambhaniya Design Verification Engineer</title>
 <meta name="description" content="Portfolio of Drashti Bambhaniya, Design Verification Engineer UVM testbenches for RISC-V CPUs and AXI4 IP, functional coverage closure, AMBA CHI cache coherency.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Drashti Bambhaniya · Design Verification Engineer">
+<meta property="og:description" content="UVM testbenches for RISC-V CPUs and AXI4 IP. 98% coverage closure, 8 RTL bugs root-caused, AMBA CHI cache coherency in progress.">
+<meta property="og:url" content="https://drashtibambhaniya.github.io/">
+<meta property="og:image" content="https://drashtibambhaniya.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Drashti Bambhaniya · Design Verification Engineer">
+<meta name="twitter:description" content="UVM testbenches for RISC-V CPUs and AXI4 IP. 98% coverage closure, 8 RTL bugs root-caused.">
+<meta name="twitter:image" content="https://drashtibambhaniya.github.io/og-image.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='6' y='6' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='6' width='40' height='40' rx='8' fill='%23F59E0B'/><rect x='6' y='54' width='40' height='40' rx='8' fill='%232DD4BF'/><rect x='54' y='54' width='40' height='40' rx='8' fill='%23334155'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,6 +33,7 @@
   --teal-dim: rgba(45, 212, 191, 0.14);
   --amber: #F59E0B;
   --amber-dim: rgba(245, 158, 11, 0.14);
+  --struct: #8C9AE8;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --display: "Space Grotesk", "Inter", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -224,6 +236,7 @@ h1 {
 
 /* coverage grid panel */
 .cov-panel {
+  position: relative;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: linear-gradient(180deg, rgba(16,26,48,0.85), rgba(11,17,32,0.6));
@@ -369,7 +382,7 @@ section { padding: 84px 0; }
 .sec-head .idx {
   font-family: var(--mono);
   font-size: 14px;
-  color: var(--amber);
+  color: var(--struct);
 }
 h2 {
   font-family: var(--display);
@@ -381,7 +394,7 @@ h2 {
   content: "";
   flex: 1;
   height: 1px;
-  background: linear-gradient(90deg, var(--border-strong), transparent);
+  background: linear-gradient(90deg, rgba(140,154,232,0.35), transparent);
   transform: translateY(-6px);
 }
 
@@ -762,6 +775,111 @@ footer {
 }
 .foot-inner .mono { font-family: var(--mono); font-size: 12px; }
 
+/* ---------- scroll coverage bar ---------- */
+#covbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  z-index: 200;
+  background: repeating-linear-gradient(90deg, #1a2540 0 9px, transparent 9px 12px);
+  pointer-events: none;
+}
+#covbar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: repeating-linear-gradient(90deg, var(--teal) 0 9px, transparent 9px 12px);
+}
+
+/* ---------- hero grid hover probe ---------- */
+.cov-probe {
+  position: absolute;
+  pointer-events: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  background: #17233c;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  padding: 5px 10px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .15s;
+  z-index: 5;
+  box-shadow: 0 8px 20px -8px rgba(0,0,0,0.7);
+}
+.cov-probe.show { opacity: 1; }
+
+/* ---------- project regression log ---------- */
+.reglog {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--teal);
+  letter-spacing: 0.02em;
+  height: 20px;
+  margin-bottom: 12px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .25s, transform .25s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.reglog::before { content: "$ "; color: var(--muted); }
+.proj:hover .reglog,
+.proj:focus-within .reglog { opacity: 1; transform: none; }
+
+/* ---------- code panel ---------- */
+.code-intro {
+  color: var(--muted);
+  max-width: 46em;
+  margin-bottom: 30px;
+}
+.code-intro strong { color: var(--text); font-weight: 600; }
+.code-panel {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #0d1526;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -30px rgba(0,0,0,0.7);
+}
+.code-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 22px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.code-head a { color: var(--struct); }
+.code-panel pre {
+  margin: 0;
+  padding: 24px 26px;
+  overflow-x: auto;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #c7d3e4;
+}
+.tok-k { color: var(--teal); }
+.tok-l { color: var(--struct); }
+.tok-n { color: var(--amber); }
+.tok-c { color: #64748B; }
+
+/* ---------- screen-reader only ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- reveal animation ---------- */
 .reveal {
   opacity: 0;
@@ -808,6 +926,7 @@ footer {
 <body>
 
 <div class="ambient" aria-hidden="true"></div>
+<div id="covbar" aria-hidden="true"><i></i></div>
 
 <nav aria-label="Primary">
   <div class="nav-inner">
@@ -852,9 +971,10 @@ footer {
       <div class="cov-panel reveal d2" role="img" aria-label="Animated functional coverage heatmap filling to 98 percent">
         <div class="cov-head">
           <span class="lbl">functional_coverage</span>
-          <span class="pct" id="covPct">0.0%</span>
+          <span class="pct" id="covPct" aria-hidden="true">0.0%</span>
         </div>
         <canvas id="covCanvas" aria-hidden="true"></canvas>
+        <div class="cov-probe" id="covProbe" aria-hidden="true"></div>
         <div class="cov-foot" aria-hidden="true">
           <span class="cov-key"><i class="k-hit"></i>bin hit</span>
           <span class="cov-key"><i class="k-cross"></i>cross hit</span>
@@ -864,10 +984,10 @@ footer {
     </div>
 
     <div class="stats">
-      <div class="stat reveal"><div class="num" data-count="98" data-suffix="%">0%</div><div class="lbl">Coverage closure on ALU testbench</div></div>
-      <div class="stat reveal d1"><div class="num" data-count="8">0</div><div class="lbl">RTL bugs root-caused via waveform debug</div></div>
-      <div class="stat reveal d2"><div class="num" data-count="35">0</div><div class="lbl">Directed tests to closure</div></div>
-      <div class="stat reveal d3"><div class="num" data-count="3">0</div><div class="lbl">UVM testbenches built RV32I · AXI4-Lite · ALU</div></div>
+      <div class="stat reveal"><div class="num"><span class="cnt" aria-hidden="true" data-count="98" data-suffix="%">0%</span><span class="sr-only">98%</span></div><div class="lbl">Coverage closure on ALU testbench</div></div>
+      <div class="stat reveal d1"><div class="num"><span class="cnt" aria-hidden="true" data-count="8">0</span><span class="sr-only">8</span></div><div class="lbl">RTL bugs root-caused via waveform debug</div></div>
+      <div class="stat reveal d2"><div class="num"><span class="cnt" aria-hidden="true" data-count="35">0</span><span class="sr-only">35</span></div><div class="lbl">Directed tests to closure</div></div>
+      <div class="stat reveal d3"><div class="num"><span class="cnt" aria-hidden="true" data-count="3">0</span><span class="sr-only">3</span></div><div class="lbl">UVM testbenches built RV32I · AXI4-Lite · ALU</div></div>
     </div>
   </div>
 </header>
@@ -1001,6 +1121,7 @@ footer {
         <div class="tags">
           <span class="tag">SystemVerilog</span><span class="tag">UVM</span><span class="tag">RISC-V ISA</span><span class="tag">Functional Coverage</span>
         </div>
+        <div class="reglog" aria-hidden="true">scoreboard: MATCH · ref_model: LOCKSTEP · isa: RV32I</div>
         <div class="repo-link">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.34.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
           <a href="https://github.com/Drashtibambhaniya/RISC-V-RV32I-UVM-Testbench" target="_blank" rel="noopener">github.com/Drashtibambhaniya/RISC-V-RV32I-UVM-Testbench</a>
@@ -1020,6 +1141,7 @@ footer {
         <div class="tags">
           <span class="tag">SystemVerilog</span><span class="tag">UVM</span><span class="tag">SVA</span><span class="tag">Functional Coverage</span>
         </div>
+        <div class="reglog" aria-hidden="true">regression: PASS 35/35 · coverage: 98.0% · bugs: 8 root-caused</div>
         <div class="repo-link">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.34.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
           <a href="https://github.com/Drashtibambhaniya/ALU_verification" target="_blank" rel="noopener">github.com/Drashtibambhaniya/ALU_verification</a>
@@ -1030,10 +1152,55 @@ footer {
   </div>
 </section>
 
+<!-- ================= INSIDE THE TESTBENCH ================= -->
+<section id="testbench">
+  <div class="wrap">
+    <div class="sec-head reveal"><span class="idx">04</span><h2>Inside the testbench</h2></div>
+    <p class="code-intro reveal d1">Tags are cheap, so here is real code. An excerpt from the <strong>ALU coverage collector</strong>: opcode coverpoints guarded by ALU mode so arithmetic and logical commands are binned separately, value-partitioned operand bins to force zero and boundary stimulus, and <strong>ignore_bins</strong> to keep the coverage space honest instead of padding the percentage.</p>
+    <div class="code-panel reveal d2">
+      <div class="code-head">
+        <span>testbench/alu_cov.sv · excerpt</span>
+        <a href="https://github.com/Drashtibambhaniya/ALU_verification/blob/main/testbench/alu_cov.sv" target="_blank" rel="noopener">view full file on GitHub</a>
+      </div>
+      <pre><code><span class="tok-k">covergroup</span> alu_cg;
+
+  <span class="tok-l">arith_cmd_cov</span>: <span class="tok-k">coverpoint</span> cmd <span class="tok-k">iff</span> (mode == <span class="tok-n">1</span>) {
+    <span class="tok-k">bins</span> op_add        = {<span class="tok-n">4'd0</span>};
+    <span class="tok-k">bins</span> op_sub        = {<span class="tok-n">4'd1</span>};
+    <span class="tok-k">bins</span> op_add_cin    = {<span class="tok-n">4'd2</span>};
+    <span class="tok-k">bins</span> op_cmp        = {<span class="tok-n">4'd8</span>};
+    <span class="tok-k">bins</span> op_mul_shift  = {<span class="tok-n">4'd10</span>};
+    <span class="tok-c">// ... 6 more arithmetic opcodes</span>
+    <span class="tok-k">ignore_bins</span> unused = {[<span class="tok-n">11</span>:<span class="tok-n">15</span>]};
+  }
+
+  <span class="tok-l">logic_cmd_cov</span>: <span class="tok-k">coverpoint</span> cmd <span class="tok-k">iff</span> (mode == <span class="tok-n">0</span>) {
+    <span class="tok-k">bins</span> op_and        = {<span class="tok-n">4'd0</span>};
+    <span class="tok-k">bins</span> op_ror        = {<span class="tok-n">4'd13</span>};
+    <span class="tok-c">// ... 12 more logical opcodes</span>
+    <span class="tok-k">ignore_bins</span> unused = {[<span class="tok-n">14</span>:<span class="tok-n">15</span>]};
+  }
+
+  <span class="tok-l">opa_value_cov</span>: <span class="tok-k">coverpoint</span> opa {
+    <span class="tok-k">bins</span> opa_zero  = {<span class="tok-n">0</span>};
+    <span class="tok-k">bins</span> opa_small = {[<span class="tok-n">1</span>:<span class="tok-n">127</span>]};
+    <span class="tok-k">bins</span> opa_large = {[<span class="tok-n">128</span>:<span class="tok-n">255</span>]};
+  }
+
+  <span class="tok-l">overflow_cov</span>: <span class="tok-k">coverpoint</span> oflow {
+    <span class="tok-k">bins</span> oflow_set   = {<span class="tok-n">1</span>};
+    <span class="tok-k">bins</span> oflow_clear = {<span class="tok-n">0</span>};
+  }
+
+<span class="tok-k">endgroup</span></code></pre>
+    </div>
+  </div>
+</section>
+
 <!-- ================= SKILLS ================= -->
 <section id="skills">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="idx">04</span><h2>Skills</h2></div>
+    <div class="sec-head reveal"><span class="idx">05</span><h2>Skills</h2></div>
     <div class="skill-groups">
 
       <div class="skill-group reveal">
@@ -1100,7 +1267,7 @@ footer {
 <!-- ================= EDUCATION ================= -->
 <section id="education">
   <div class="wrap">
-    <div class="sec-head reveal"><span class="idx">05</span><h2>Education</h2></div>
+    <div class="sec-head reveal"><span class="idx">06</span><h2>Education</h2></div>
     <div class="edu-grid">
       <div class="edu reveal">
         <div class="school">Nirma University</div>
@@ -1119,7 +1286,7 @@ footer {
 <!-- ================= CONTACT ================= -->
 <section id="contact" class="contact">
   <div class="wrap">
-    <div class="sec-head reveal" style="justify-content:center"><span class="idx">06</span><h2>Get in touch</h2></div>
+    <div class="sec-head reveal" style="justify-content:center"><span class="idx">07</span><h2>Get in touch</h2></div>
     <p class="sub reveal d1">Open to conversations about design verification, RISC-V, coverage methodology, and AMBA protocols. The fastest way to reach me is email.</p>
     <div class="contact-links reveal d2">
       <a class="btn primary" href="mailto:drashtiahir23@gmail.com">
@@ -1161,7 +1328,7 @@ footer {
   }
 
   /* ---------- stat counters ---------- */
-  const nums = document.querySelectorAll(".stat .num[data-count]");
+  const nums = document.querySelectorAll(".stat .cnt[data-count]");
   function runCounter(el) {
     const target = parseFloat(el.dataset.count);
     const suffix = el.dataset.suffix || "";
@@ -1200,6 +1367,17 @@ footer {
     sections.forEach(s => s.id && no.observe(s));
   }
 
+  /* ---------- scroll coverage bar ---------- */
+  const covbarFill = document.querySelector("#covbar i");
+  function updBar() {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const p = max > 0 ? Math.min(window.scrollY / max, 1) : 1;
+    covbarFill.style.width = (p * 100).toFixed(1) + "%";
+  }
+  window.addEventListener("scroll", updBar, { passive: true });
+  window.addEventListener("resize", updBar);
+  updBar();
+
   /* ---------- coverage grid hero animation ---------- */
   const canvas = document.getElementById("covCanvas");
   const pctEl = document.getElementById("covPct");
@@ -1208,6 +1386,7 @@ footer {
   const TARGET_PCT = 98.0;
 
   let cells = [], cols = 0, rows = 0, cell = 0, gap = 5, dpr = 1;
+  let offX = 0, offY = 0;
   let animStart = null, done = false;
   const FILL_DUR = 2600, POP = 260;
   let mouse = { x: -1e4, y: -1e4 };
@@ -1240,8 +1419,8 @@ footer {
     const rank = new Array(total);
     order.forEach((cellIdx, r) => { rank[cellIdx] = r; });
 
-    const offX = (w - (cols * (cell + gap) - gap)) / 2;
-    const offY = (h - (rows * (cell + gap) - gap)) / 2;
+    offX = (w - (cols * (cell + gap) - gap)) / 2;
+    offY = (h - (rows * (cell + gap) - gap)) / 2;
 
     cells = [];
     for (let i = 0; i < total; i++) {
@@ -1344,14 +1523,38 @@ footer {
       requestAnimationFrame(idle);
     }
   }
+  /* hover probe: coverage-tool style bin readout */
+  const probe = document.getElementById("covProbe");
+  function updProbe() {
+    if (!done) return;
+    const col = Math.floor((mouse.x - offX) / (cell + gap));
+    const row = Math.floor((mouse.y - offY) / (cell + gap));
+    if (col >= 0 && col < cols && row >= 0 && row < rows) {
+      const c = cells[row * cols + col];
+      probe.textContent = "bin[" + row + "][" + col + "]: " +
+        (c.miss ? "MISS" : c.cross ? "HIT · cross: opcode×operand" : "HIT");
+      probe.style.color = c.miss ? "#97A6BC" : c.cross ? "#F59E0B" : "#2DD4BF";
+      const panel = probe.parentElement;
+      let px = canvas.offsetLeft + mouse.x + 16;
+      const py = canvas.offsetTop + mouse.y - 34;
+      probe.classList.add("show");
+      if (px + probe.offsetWidth > panel.clientWidth - 8) px = canvas.offsetLeft + mouse.x - probe.offsetWidth - 16;
+      probe.style.left = px + "px";
+      probe.style.top = py + "px";
+    } else {
+      probe.classList.remove("show");
+    }
+  }
   canvas.addEventListener("pointermove", e => {
     const r = canvas.getBoundingClientRect();
     mouse.x = e.clientX - r.left;
     mouse.y = e.clientY - r.top;
+    updProbe();
     queueIdle();
   });
   canvas.addEventListener("pointerleave", () => {
     mouse.x = mouse.y = -1e4;
+    probe.classList.remove("show");
     queueIdle();
   });
 

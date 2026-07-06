@@ -891,6 +891,117 @@ footer {
 .tok-n { color: var(--amber); }
 .tok-c { color: #64748B; }
 
+/* ---------- bug case study dialog ---------- */
+.bugtrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+  padding: 5px 13px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--amber-dim);
+  color: var(--amber);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, transform .18s;
+}
+.bugtrigger:hover {
+  background: rgba(245, 166, 35, 0.22);
+  border-color: var(--amber);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+.bugtrigger:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+.bugtrigger svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+.bugcase {
+  width: min(780px, 92vw);
+  max-height: 88vh;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  background: var(--bg-raised);
+  color: var(--text);
+  box-shadow: 0 40px 100px -30px rgba(0,0,0,0.85);
+  overflow: hidden;
+}
+.bugcase::backdrop { background: rgba(5, 8, 14, 0.72); backdrop-filter: blur(4px); }
+.bugcase-inner { max-height: 88vh; overflow-y: auto; }
+.bugcase-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 22px 26px 18px;
+  background: var(--bg-raised);
+  border-bottom: 1px solid var(--border);
+}
+.bugcase-head .tag-mono {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--amber);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bugcase-head h3 { font-family: var(--display); font-size: 21px; line-height: 1.28; margin-top: 7px; font-weight: 600; }
+.bugcase-close {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-strong);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+.bugcase-close:hover { color: var(--text); border-color: var(--amber); }
+.bugcase-body { padding: 24px 26px 30px; }
+.bugcase-body .step { margin-bottom: 24px; }
+.bugcase-body .step:last-child { margin-bottom: 0; }
+.bugcase-body .step-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--struct);
+  margin-bottom: 9px;
+}
+.bugcase-body p { color: #c7d0e0; margin-bottom: 11px; font-size: 15px; }
+.bugcase-body p:last-child { margin-bottom: 0; }
+.bugcase-body strong { color: var(--text); font-weight: 600; }
+.bugcase-body code.inl {
+  font-family: var(--mono);
+  font-size: 0.84em;
+  color: var(--teal);
+  background: var(--teal-dim);
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.bugcase-code {
+  margin: 12px 0 4px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #0d1526;
+  overflow-x: auto;
+}
+.bugcase-code pre {
+  margin: 0;
+  padding: 15px 18px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: #c7d3e4;
+}
+
 /* ---------- skills cross-coverage matrix ---------- */
 .xcov {
   margin-top: 48px;
@@ -1165,7 +1276,12 @@ footer {
           <li>Built SV/UVM layered testbenches for an <strong>RV32I RISC-V processor</strong>, <strong>AXI4-Lite slave RAM</strong>, and <strong>ALU design</strong> constrained-random stimulus generation, self-checking scoreboards, and full end-to-end simulation flow across all projects.</li>
           <li>Structured each environment around standard UVM <strong>agent / sequencer / driver / monitor / coverage-collector</strong> architecture for reusability across design blocks.</li>
           <li>Implemented <strong>SystemVerilog Assertions</strong> to validate protocol handshake behaviour and design correctness, supporting verification closure.</li>
-          <li>Designed <strong>functional coverage models</strong> with targeted bins for instruction categories, protocol scenarios, corner cases, and state transitions closed ALU testbench coverage to 98% across 35 directed tests and root-caused 8 RTL bugs.</li>
+          <li>Designed <strong>functional coverage models</strong> with targeted bins for instruction categories, protocol scenarios, corner cases, and state transitions closed ALU testbench coverage to 98% across 35 directed tests and root-caused 8 RTL bugs.
+            <button type="button" class="bugtrigger" data-open-bugcase aria-haspopup="dialog">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>
+              example: RES=X on MUL_INC
+            </button>
+          </li>
           <li>Ran simulations in <strong>Mentor Questa</strong> and <strong>Synopsys VCS</strong>, analyzed waveform outputs, and performed root-cause analysis across regression runs.</li>
           <li>Currently building protocol-level understanding of <strong>ARM AMBA CHI</strong> cache coherency, node architecture, transaction flows, and channel structure through structured specification study.</li>
         </ul>
@@ -1233,6 +1349,10 @@ footer {
           <span class="tag">SystemVerilog</span><span class="tag">UVM</span><span class="tag">SVA</span><span class="tag">Functional Coverage</span>
         </div>
         <div class="reglog" aria-hidden="true">regression: PASS 35/35 · coverage: 98.0% · bugs: 8 root-caused</div>
+        <button type="button" class="bugtrigger" data-open-bugcase aria-haspopup="dialog">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>
+          read the debug story: RES=X on MUL_INC
+        </button>
         <div class="repo-link">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.69 1.25 3.34.96.1-.75.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.1 11.1 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.25 5.67.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"/></svg>
           <a href="https://github.com/Drashtibambhaniya/ALU_verification" target="_blank" rel="noopener">github.com/Drashtibambhaniya/ALU_verification</a>
@@ -1430,6 +1550,58 @@ footer {
   </div>
 </section>
 </main>
+
+<!-- ================= BUG CASE STUDY DIALOG ================= -->
+<dialog class="bugcase" id="bugcase" aria-labelledby="bugcase-title">
+  <div class="bugcase-inner">
+    <div class="bugcase-head">
+      <div>
+        <span class="tag-mono">Debug story · 1 of 8 root-caused</span>
+        <h3 id="bugcase-title">RES=X on <code class="inl" style="font-size:0.9em">MUL_INC</code>, then MULs returning the previous transaction's product</h3>
+      </div>
+      <button type="button" class="bugcase-close" aria-label="Close">&times;</button>
+    </div>
+    <div class="bugcase-body">
+
+      <div class="step">
+        <div class="step-label">Symptom</div>
+        <p>During regression, the <code class="inl">mul_inc</code> test failed. The scoreboard reported <strong><code class="inl">RES=X</code> on the first MUL_INC transaction</strong> and, more strangely, subsequent back-to-back MULs returned the <strong>product of the <em>previous</em> transaction's operands</strong>. At first glance this looked like an off-by-one pipeline-delay bug in my reference model.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-label">Waveform trace</div>
+        <p>Rather than patch the reference model, I traced <code class="inl">RES</code> back through the execute block in the waveform. I saw <code class="inl">AU_out_tmp1</code> / <code class="inl">AU_out_tmp2</code> updating <strong>one clock after</strong> the multiply consumed them. At the execute edge, <code class="inl">RES</code> sampled the temp registers' <strong>pre-update values</strong>, while the newly incremented operands only landed on the following edge which is exactly the one-cycle skew the scoreboard was flagging.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-label">Root cause #1 — non-blocking read-before-write</div>
+        <p>Two dependent computations were written in a single case branch as if they executed sequentially:</p>
+        <div class="bugcase-code"><pre><span class="tok-l">AU_out_tmp1</span> <span class="tok-k">&lt;=</span> oprd1 + <span class="tok-n">1</span>;
+<span class="tok-l">RES</span>         <span class="tok-k">&lt;=</span> <span class="tok-l">AU_out_tmp1</span> * <span class="tok-l">AU_out_tmp2</span>;   <span class="tok-c">// reads the OLD tmp1</span></pre></div>
+        <p>With <strong>non-blocking (NBA) semantics</strong>, all right-hand sides evaluate against <strong>pre-edge values</strong>, so <code class="inl">RES</code> multiplied the <em>stale</em> <code class="inl">AU_out_tmp1</code>, and the incremented value only appeared a cycle later. The code assumed blocking, sequential execution.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-label">Root cause #2 — reset gated by clock-enable</div>
+        <p>The first-transaction <code class="inl">X</code> had a compounding second cause: the temp registers were <strong>never reset</strong>, because the reset branch sat <strong>inside <code class="inl">if (CE)</code></strong>. A reset asserted with clock-enable low which is the power-on condition left them uninitialized, so the very first multiply read <code class="inl">X</code>.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-label">Why regression sometimes hid it</div>
+        <p>The bug was <strong>masked whenever the driver held <code class="inl">INP_VALID</code> for three cycles</strong>: the pipeline self-flushes and the final value comes out correct. I documented it as <strong>observable only under cycle-accurate monitoring</strong> a case a coarser checker would have passed straight through.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-label">The fix</div>
+        <p>Compute intermediates in <strong>block-local variables</strong> (or add a proper <strong>3-stage FSM</strong>) so the multiply sees the incremented operand in the same cycle, and restructure reset so it can never be gated by <code class="inl">CE</code>:</p>
+        <div class="bugcase-code"><pre><span class="tok-k">always</span> @(<span class="tok-k">posedge</span> CLK <span class="tok-k">or</span> <span class="tok-k">posedge</span> RST)   <span class="tok-c">// RST at highest priority</span>
+  <span class="tok-k">if</span> (RST) <span class="tok-k">begin</span> ... <span class="tok-k">end</span>
+  <span class="tok-k">else if</span> (CE) <span class="tok-k">begin</span> ... <span class="tok-k">end</span></pre></div>
+      </div>
+
+    </div>
+  </div>
+</dialog>
 
 <footer>
   <div class="foot-inner">
@@ -1701,6 +1873,23 @@ footer {
 
   build();
   requestAnimationFrame(draw);
+
+  /* ---------- bug case study dialog ---------- */
+  const bugDialog = document.getElementById("bugcase");
+  if (bugDialog) {
+    const openBtns = document.querySelectorAll("[data-open-bugcase]");
+    const closeBtn = bugDialog.querySelector(".bugcase-close");
+    const openDialog = () => {
+      if (typeof bugDialog.showModal === "function") bugDialog.showModal();
+      else bugDialog.setAttribute("open", "");
+    };
+    openBtns.forEach(btn => btn.addEventListener("click", openDialog));
+    closeBtn.addEventListener("click", () => bugDialog.close());
+    // click on the backdrop (the dialog element itself) closes it
+    bugDialog.addEventListener("click", e => { if (e.target === bugDialog) bugDialog.close(); });
+    // reset scroll position each time it opens
+    bugDialog.addEventListener("close", () => { bugDialog.querySelector(".bugcase-inner").scrollTop = 0; });
+  }
 })();
 </script>
 

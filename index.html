@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drashti Bambhaniya Design Verification Engineer</title>
+<title>Drashti Bambhaniya · Design Verification Engineer</title>
 <meta name="description" content="Portfolio of Drashti Bambhaniya, Design Verification Engineer UVM testbenches for RISC-V CPUs and AXI4 IP, functional coverage closure, AMBA CHI cache coherency.">
+<meta name="theme-color" content="#0A0E17">
+<link rel="canonical" href="https://drashtibambhaniya.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Drashti Bambhaniya · Design Verification Engineer">
 <meta property="og:description" content="UVM testbenches for RISC-V CPUs and AXI4 IP. 98% coverage closure, 8 RTL bugs root-caused, AMBA CHI cache coherency in progress.">
@@ -950,6 +952,7 @@ footer {
   text-transform: uppercase;
 }
 .bugcase-head h3 { font-family: var(--display); font-size: 21px; line-height: 1.28; margin-top: 7px; font-weight: 600; }
+.bugcase-head h3 code.inl { font-size: 0.9em; }
 .bugcase-close {
   flex-shrink: 0;
   width: 34px;
@@ -1116,6 +1119,22 @@ footer {
   .chip[data-used]::after { white-space: normal; width: max-content; max-width: 220px; }
 }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Drashti Bambhaniya",
+  "jobTitle": "Design Verification Engineer",
+  "url": "https://drashtibambhaniya.github.io/",
+  "email": "mailto:drashtiahir23@gmail.com",
+  "worksFor": { "@type": "Organization", "name": "Mirafra Technologies" },
+  "knowsAbout": ["SystemVerilog", "UVM", "Functional Coverage", "RISC-V", "AMBA CHI", "AXI4", "SVA"],
+  "sameAs": [
+    "https://github.com/Drashtibambhaniya",
+    "https://www.linkedin.com/in/drashti-bambhaniya"
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -1129,6 +1148,7 @@ footer {
       <li><a href="#about">About</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#projects">Projects</a></li>
+      <li><a href="#testbench">Testbench</a></li>
       <li><a href="#skills">Skills</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -1557,7 +1577,7 @@ footer {
     <div class="bugcase-head">
       <div>
         <span class="tag-mono">Debug story · 1 of 8 root-caused</span>
-        <h3 id="bugcase-title">RES=X on <code class="inl" style="font-size:0.9em">MUL_INC</code>, then MULs returning the previous transaction's product</h3>
+        <h3 id="bugcase-title">RES=X on <code class="inl">MUL_INC</code>, then MULs returning the previous transaction's product</h3>
       </div>
       <button type="button" class="bugcase-close" aria-label="Close">&times;</button>
     </div>
@@ -1882,13 +1902,17 @@ footer {
     const openDialog = () => {
       if (typeof bugDialog.showModal === "function") bugDialog.showModal();
       else bugDialog.setAttribute("open", "");
+      document.body.style.overflow = "hidden";
     };
     openBtns.forEach(btn => btn.addEventListener("click", openDialog));
     closeBtn.addEventListener("click", () => bugDialog.close());
     // click on the backdrop (the dialog element itself) closes it
     bugDialog.addEventListener("click", e => { if (e.target === bugDialog) bugDialog.close(); });
-    // reset scroll position each time it opens
-    bugDialog.addEventListener("close", () => { bugDialog.querySelector(".bugcase-inner").scrollTop = 0; });
+    // restore background scroll and reset scroll position each time it closes
+    bugDialog.addEventListener("close", () => {
+      document.body.style.overflow = "";
+      bugDialog.querySelector(".bugcase-inner").scrollTop = 0;
+    });
   }
 })();
 </script>
